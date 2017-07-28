@@ -63,7 +63,7 @@ define(function(require) {
 					.empty()
 					.append(webhooksTemplate);
 
-				if(webhookId) {
+				if (webhookId) {
 					var cells = parent.find('.grid-row[data-id=' + webhookId + ']');
 
 					monster.ui.highlight(cells);
@@ -84,8 +84,8 @@ define(function(require) {
 				groups = {};
 
 			_.each(webhooksData, function(webhook) {
-				if(webhook.group) {
-					if(!groups.hasOwnProperty(webhook.group)) {
+				if (webhook.group) {
+					if (!groups.hasOwnProperty(webhook.group)) {
 						groups[webhook.group] = {
 							groupName: webhook.group,
 							webhooks: []
@@ -156,20 +156,20 @@ define(function(require) {
 				_.each(rows, function(row) {
 					var $row = $(row),
 						rowGroup = $row.parents('.grid-row-group');
-					if($row.data('search').toLowerCase().indexOf(searchString) < 0) {
+					if ($row.data('search').toLowerCase().indexOf(searchString) < 0) {
 						$row.hide();
-						if(rowGroup.length > 0 && rowGroup.find('.grid-row:not(.title):visible').length === 0) {
+						if (rowGroup.length > 0 && rowGroup.find('.grid-row:not(.title):visible').length === 0) {
 							rowGroup.hide();
 						}
 					} else {
 						$row.show();
-						if(rowGroup.length > 0) {
+						if (rowGroup.length > 0) {
 							rowGroup.show();
 						}
 					}
 				});
 
-				if(rows.size() > 0) {
+				if (rows.size() > 0) {
 					rows.is(':visible') ? emptySearch.hide() : emptySearch.show();
 				}
 			});
@@ -184,7 +184,7 @@ define(function(require) {
 						var activeCounter = template.find('.counter-active .count'),
 							disabledCounter = template.find('.counter-disabled .count');
 
-						if(enabled) {
+						if (enabled) {
 							activeCounter.html(parseInt(activeCounter.html()) + 1);
 							disabledCounter.html(parseInt(disabledCounter.html()) - 1);
 						} else {
@@ -207,7 +207,7 @@ define(function(require) {
 							});
 						},
 						webhookDetails: function(parallelCallback) {
-							if(webhookId) {
+							if (webhookId) {
 								self.getWebhookDetails(webhookId, function(webhookData) {
 									parallelCallback && parallelCallback(null, webhookData);
 								});
@@ -243,7 +243,7 @@ define(function(require) {
 
 				// Since we don't have a "none" state for the hook, if there's no existing webhook, the first webhook of the list will be selected
 				// So we need to had this hack to display the right modifiers div
-				if((_.isEmpty(webhookData.webhookDetails) || !webhookData.webhookDetails.hook) && webhookList.length) {
+				if ((_.isEmpty(webhookData.webhookDetails) || !webhookData.webhookDetails.hook) && webhookList.length) {
 					template.find('.modifiers-webhooks[data-webhook="' + webhookList[0].id + '"]').addClass('active');
 				}
 
@@ -253,32 +253,32 @@ define(function(require) {
 					currentHook = webhookData.webhookDetails.hasOwnProperty('hook') ? webhookData.webhookDetails.hook : undefined;
 
 				_.each(webhookList, function(webhook) {
-					if(webhook.modifiers) {
+					if (webhook.modifiers) {
 						_.each(webhook.modifiers, function(modifier, key) {
-							if(protectedCustomData.indexOf(key) < 0) {
+							if (protectedCustomData.indexOf(key) < 0) {
 								protectedCustomData.push(key);
 							}
 						});
 
 						// If we're looping over the current webhook we're about to display, save the modifiers so we can select the proper values in the UI later
-						if(webhook.name === currentHook) {
+						if (webhook.name === currentHook) {
 							currentModifiers = webhook.modifiers;
 						}
 					}
 				});
 
-				if(webhookData.webhookDetails.hasOwnProperty('custom_data')) {
+				if (webhookData.webhookDetails.hasOwnProperty('custom_data')) {
 					_.each(webhookData.webhookDetails.custom_data, function(value, key) {
-						if(currentModifiers.hasOwnProperty(key)) {
+						if (currentModifiers.hasOwnProperty(key)) {
 							template.find('.modifiers-webhooks[data-webhook="' + currentHook + '"] .select-modifier[name="' + key + '"]').val(value);
 						}
 					});
 				}
 
 				// Iterate through custom_data to print current custom_data
-				if(webhookData.webhookDetails.custom_data) {
+				if (webhookData.webhookDetails.custom_data) {
 					_.each(webhookData.webhookDetails.custom_data, function(val, key) {
-						if(protectedCustomData.indexOf(key) < 0) {
+						if (protectedCustomData.indexOf(key) < 0) {
 							var customDataTemplate = monster.template(self, 'webhooks-customDataRow', {
 								key: key,
 								value: val
@@ -311,7 +311,7 @@ define(function(require) {
 				webhookGroups = self.uiFlags.account.get('groups') || {};
 
 			template.find('.select-group').on('change', function() {
-				if($(this).val() === 'new') {
+				if ($(this).val() === 'new') {
 					template.find('.new-group-container').show();
 				} else {
 					template.find('.new-group-container').hide();
@@ -354,11 +354,11 @@ define(function(require) {
 			});
 
 			template.find('.action-bar .save').on('click', function() {
-				if(monster.ui.valid(template.find('#webhook_edition_form'))) {
+				if (monster.ui.valid(template.find('#webhook_edition_form'))) {
 					self.getFormData(template, function(formData) {
-						if(_.isEmpty(webhookData)) {
+						if (_.isEmpty(webhookData)) {
 							self.addWebhook(formData, function(data) {
-								if(formData.group) {
+								if (formData.group) {
 									webhookGroups[formData.group] = (webhookGroups[formData.group] || 0) + 1;
 									self.updateWebhookGroups(webhookGroups, function() {
 										self.render({ webhookId: data.id });
@@ -370,11 +370,11 @@ define(function(require) {
 							});
 						} else {
 							self.updateWebhook(webhookData.id, formData, function(data) {
-								if(formData.group) {
-									if(formData.group !== webhookData.group) {
+								if (formData.group) {
+									if (formData.group !== webhookData.group) {
 										webhookGroups[formData.group] = (webhookGroups[formData.group] || 0) + 1;
 										webhookGroups[webhookData.group] = (webhookGroups[webhookData.group] || 0) - 1;
-										if(webhookGroups[webhookData.group] <= 0) {
+										if (webhookGroups[webhookData.group] <= 0) {
 											delete webhookGroups[webhookData.group];
 										}
 										self.updateWebhookGroups(webhookGroups, function() {
@@ -383,9 +383,9 @@ define(function(require) {
 									} else {
 										self.render({ webhookId: data.id });
 									}
-								} if(webhookData.group) {
+								} if (webhookData.group) {
 									webhookGroups[webhookData.group] = (webhookGroups[webhookData.group] || 0) - 1;
-									if(webhookGroups[webhookData.group] <= 0) {
+									if (webhookGroups[webhookData.group] <= 0) {
 										delete webhookGroups[webhookData.group];
 									}
 									self.updateWebhookGroups(webhookGroups, function() {
@@ -568,13 +568,13 @@ define(function(require) {
 				}
 			});
 
-			if(isValid) {
+			if (isValid) {
 				var formData = monster.ui.getFormData('webhook_edition_form');
 				formData.custom_data = customData;
 				delete formData.extra;
-				if(groupSelect === 'new') {
+				if (groupSelect === 'new') {
 					formData.group = newGroup;
-				} else if(groupSelect !== 'none') {
+				} else if (groupSelect !== 'none') {
 					formData.group = groupSelect.replace('group_', '');
 				}
 				callback && callback(formData);
